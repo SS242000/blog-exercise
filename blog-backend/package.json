@@ -1,0 +1,22 @@
+{
+  "name": "blog-backend",
+  "version": "1.0.0",
+  "description": "this is for the blog backend in node js",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "shivasankaran M",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "nodemon": "^3.1.9",
+    "sequelize": "^6.37.5",
+    "sqlite3": "^5.1.7"
+  }
+}
