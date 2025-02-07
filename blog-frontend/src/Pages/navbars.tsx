@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 interface NavbarProps {
@@ -11,10 +11,12 @@ const Navbar: React.FC<NavbarProps> = ({ showSearch = true, onSearch }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const locationData = useLocation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
- 
-  const {email,username} = locationData.state.userDetails || {}
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const { email, username } = locationData.state.userDetails || {};
+
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
     onSearch(event.target.value);
@@ -25,9 +27,9 @@ const Navbar: React.FC<NavbarProps> = ({ showSearch = true, onSearch }) => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token")
-    sessionStorage.removeItem("token")
-    navigate("/")
+    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
+    navigate("/");
   };
 
   const path = location?.pathname;
@@ -35,6 +37,20 @@ const Navbar: React.FC<NavbarProps> = ({ showSearch = true, onSearch }) => {
     "/blogs": "Blogs",
     "/home": "Home",
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav className="bg-[#130F40] border-black dark:bg-gray-900 shadow-lg border-b-2 sticky top-0">
@@ -61,7 +77,7 @@ const Navbar: React.FC<NavbarProps> = ({ showSearch = true, onSearch }) => {
             </text>
           </ul>
 
-          <div className="relative">
+          <div className="relative" ref={dropdownRef}>
             <img
               onClick={toggleDropdown}
               className="w-10 h-10 rounded-full cursor-pointer"
@@ -70,12 +86,12 @@ const Navbar: React.FC<NavbarProps> = ({ showSearch = true, onSearch }) => {
             />
 
             {isDropdownOpen && (
-              <div className="absolute border mt-2  bg-[#7a71d8] divide-y divide-gray-100 rounded-lg shadow-lg dark:bg-gray-700 dark:divide-gray-600 ">
+              <div className="absolute border mt-2  bg-[#7a71d8] divide-y divide-gray-100 rounded-lg shadow-lg dark:bg-gray-700 dark:divide-gray-600">
                 <div className="px-4 py-3 text-sm text-gray-900 dark:text-white hover:bg-[#130F40]">
                   <div className=" text-white">{username}</div>
                   <div className="font-medium text-white">{email}</div>
                 </div>
-              
+
                 <div className="py-1">
                   <button
                     onClick={handleLogout}
@@ -89,7 +105,6 @@ const Navbar: React.FC<NavbarProps> = ({ showSearch = true, onSearch }) => {
           </div>
         </div>
 
-        {/* Search Bar */}
         {showSearch && (
           <div className="w-[40%] mx-auto rounded-lg border-sky-900 border-2">
             <div className="relative flex items-center w-full h-8 rounded-lg focus-within:shadow-lg bg-[#130F40] overflow-hidden">

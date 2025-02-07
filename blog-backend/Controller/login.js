@@ -4,7 +4,6 @@ require("dotenv").config();
 const JWT_SECRET1 = process.env.JWT_SECRET;
 
 exports.ValidateUser = async (req, res) => {
-  console.info("Hello World");
   const { email = null, password = null } = req.body || {};
   if (!email || !password) {
     return res.status(404).json({ error: "Email or password is missing" });

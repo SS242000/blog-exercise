@@ -21,7 +21,7 @@ const User = sequelize.define('User', {
     }
   }, {
     tableName: 'users' ,
-    timestamps: false // Exclude Sequelize's default timestamps
+    timestamps: false 
 
   });
 const Blog = sequelize.define('Blog', {
